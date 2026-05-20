@@ -51,17 +51,17 @@
 
   body {
     margin: 0;
-    padding: 2rem 1rem;
+    padding: 1rem;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     font-size: 16px;
-    line-height: 1.6;
+    line-height: 1.5;
     color: var(--text);
     background: var(--bg);
     -webkit-font-smoothing: antialiased;
   }
 
   .container {
-    max-width: 720px;
+    max-width: 1100px;
     margin: 0 auto;
   }
 
@@ -69,14 +69,14 @@
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.75rem;
     flex-wrap: wrap;
     gap: 8px;
   }
 
   h1 {
     margin: 0;
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 500;
   }
 
@@ -88,17 +88,27 @@
   .grid-2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 1rem;
+    gap: 10px;
+    margin-bottom: 10px;
   }
 
   .grid-4 {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin: 1.5rem 0;
+    gap: 8px;
+    margin: 10px 0;
   }
 
+  .grid-output {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  @media (max-width: 720px) {
+    .grid-output { grid-template-columns: 1fr; }
+  }
   @media (max-width: 560px) {
     .grid-2 { grid-template-columns: 1fr; }
     .grid-4 { grid-template-columns: repeat(2, 1fr); }
@@ -108,18 +118,18 @@
     background: var(--surface);
     border: 0.5px solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 1rem 1.25rem;
+    padding: 10px 14px;
   }
 
   .card-label {
     font-size: 13px;
     color: var(--text-muted);
-    margin: 0 0 12px;
+    margin: 0 0 8px;
     font-weight: 500;
   }
 
   .field {
-    margin-bottom: 12px;
+    margin-bottom: 8px;
   }
   .field:last-child {
     margin-bottom: 0;
@@ -151,6 +161,13 @@
   input[type="number"]:focus {
     border-color: var(--accent);
     box-shadow: 0 0 0 3px var(--accent-bg);
+  }
+  input[type="number"]:placeholder-shown {
+    border-color: var(--accent);
+    background: var(--accent-bg);
+  }
+  input[type="number"]:placeholder-shown:focus {
+    background: var(--surface);
   }
 
   input[type="range"] {
@@ -204,30 +221,30 @@
   .metric {
     background: var(--surface-2);
     border-radius: var(--radius-md);
-    padding: 1rem;
+    padding: 8px 10px;
   }
   .metric-label {
-    font-size: 13px;
+    font-size: 12px;
     color: var(--text-muted);
-    margin: 0 0 4px;
+    margin: 0 0 2px;
   }
   .metric-value {
-    font-size: 24px;
+    font-size: 18px;
     font-weight: 500;
     margin: 0;
   }
 
   .result {
     border-radius: var(--radius-lg);
-    padding: 1rem 1.25rem;
-    margin-bottom: 1rem;
+    padding: 10px 14px;
+    margin: 10px 0;
     transition: background 0.15s, border-color 0.15s;
   }
   .result-header {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 8px;
+    gap: 8px;
+    margin-bottom: 4px;
   }
   .result-icon {
     font-size: 20px;
@@ -262,24 +279,42 @@
   .result-warning .result-detail,
   .result-warning .result-icon { color: var(--warning); }
 
+  .result-info {
+    background: var(--accent-bg);
+    border: 0.5px solid var(--accent);
+    color: var(--accent);
+  }
+  .result-info .result-title,
+  .result-info .result-detail,
+  .result-info .result-icon { color: var(--accent); }
+
   .breakdown {
     background: var(--surface-2);
     border-radius: var(--radius-md);
-    padding: 1rem 1.25rem;
+    padding: 12px 16px;
   }
   .breakdown-label {
-    font-size: 13px;
+    font-size: 11px;
     color: var(--text-muted);
     margin: 0 0 8px;
-    font-weight: 500;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
   }
   .breakdown-table {
     width: 100%;
     font-size: 13px;
     border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+  }
+  .breakdown-table tr {
+    border-bottom: 0.5px solid var(--border);
+  }
+  .breakdown-table tr:last-child {
+    border-bottom: none;
   }
   .breakdown-table td {
-    padding: 4px 0;
+    padding: 6px 0;
   }
   .breakdown-table .label-cell {
     color: var(--text-muted);
@@ -287,12 +322,25 @@
   .breakdown-table .value-cell {
     text-align: right;
     font-weight: 500;
+    color: var(--text);
+  }
+  .breakdown-table tr.row-highlight .label-cell,
+  .breakdown-table tr.row-highlight .value-cell {
+    color: var(--success);
+    font-weight: 600;
+  }
+  .breakdown-table tr.row-highlight .value-cell {
+    font-size: 15px;
+  }
+  .breakdown-table tr.row-refund.has-refund .label-cell,
+  .breakdown-table tr.row-refund.has-refund .value-cell {
+    color: var(--warning);
   }
 
   .footer {
-    margin-top: 2rem;
+    margin-top: 10px;
     text-align: center;
-    font-size: 12px;
+    font-size: 11px;
     color: var(--text-hint);
   }
   .footer a {
@@ -300,17 +348,59 @@
   }
 
   .disclaimer {
-    margin: 1.5rem 0 0;
-    padding: 10px 14px;
+    margin: 8px 0 0;
+    padding: 8px 12px;
     background: var(--warning-bg);
     border: 0.5px solid var(--warning-border);
     border-radius: var(--radius-md);
     text-align: center;
-    font-size: 13px;
-    line-height: 1.5;
+    font-size: 12px;
+    line-height: 1.4;
     color: var(--warning);
   }
   .disclaimer strong { font-weight: 600; }
+
+  .hint {
+    display: inline-block;
+    color: var(--text-hint);
+    cursor: help;
+    font-size: 12px;
+    margin-left: 2px;
+  }
+  .hint:hover { color: var(--accent); }
+
+  .chart-card {
+    background: var(--surface-2);
+    border-radius: var(--radius-md);
+    padding: 10px 14px;
+  }
+  .chart-card svg { display: block; width: 100%; height: auto; color: var(--text-muted); }
+  .chart-empty {
+    text-align: center;
+    color: var(--text-hint);
+    font-size: 13px;
+    padding: 2rem 0;
+  }
+  .bar-below   { fill: var(--text-hint); }
+  .bar-noref   { fill: var(--success); }
+  .bar-cap     { fill: var(--success); }
+  .bar-above   { fill: var(--text-hint); }
+  .bar-current { stroke: var(--text); stroke-width: 2; }
+  .chart-legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .legend-dot {
+    display: inline-block;
+    width: 10px; height: 10px;
+    border-radius: 2px;
+    margin-right: 4px;
+    vertical-align: -1px;
+  }
 </style>
 </head>
 <body>
@@ -326,8 +416,8 @@
     <div class="card">
       <p class="card-label">Period 1 (completed)</p>
       <div class="field">
-        <label for="fmv1">Grant-date FMV ($)</label>
-        <input type="number" id="fmv1" value="24.21" step="0.01" min="0">
+        <label for="fmv1">Grant-date FMV ($) <span class="hint" title="Fair Market Value (closing share price) on the offering's grant date. Used to measure the $25K annual IRS limit.">ⓘ</span></label>
+        <input type="number" id="fmv1" value="" step="0.01" min="0" placeholder="e.g. 24.21">
       </div>
       <div class="field">
         <label for="shares1">Shares purchased</label>
@@ -338,12 +428,12 @@
     <div class="card">
       <p class="card-label">Period 2 (upcoming)</p>
       <div class="field">
-        <label for="fmv2">Grant-date FMV ($)</label>
-        <input type="number" id="fmv2" value="31.00" step="0.01" min="0">
+        <label for="fmv2">Grant-date FMV ($) <span class="hint" title="Fair Market Value (closing share price) on the offering's grant date. With the lookback, the discounted price uses the LOWER of grant-date and purchase-date FMV.">ⓘ</span></label>
+        <input type="number" id="fmv2" value="" step="0.01" min="0" placeholder="e.g. 31.00">
       </div>
       <div class="field">
-        <label for="fmvp2">Est. purchase-date FMV ($)</label>
-        <input type="number" id="fmvp2" value="31.00" step="0.01" min="0">
+        <label for="fmvp2">Est. purchase-date FMV ($) <span class="hint" title="Estimated share price on the purchase date (end of the offering period). A best-guess — actual price determines the final purchase price via the 15% discount on the lower of grant/purchase FMV.">ⓘ</span></label>
+        <input type="number" id="fmvp2" value="" step="0.01" min="0" placeholder="e.g. 31.00">
       </div>
     </div>
   </div>
@@ -363,22 +453,22 @@
     </div>
   </div>
 
-  <div class="grid-4">
+  <div class="grid-4" id="metrics">
     <div class="metric">
       <p class="metric-label">P1 limit used</p>
-      <p class="metric-value">$<span id="used1">12,928</span></p>
+      <p class="metric-value">$<span id="used1">—</span></p>
     </div>
     <div class="metric">
       <p class="metric-label">P2 limit remaining</p>
-      <p class="metric-value">$<span id="remaining">12,072</span></p>
+      <p class="metric-value">$<span id="remaining">—</span></p>
     </div>
     <div class="metric">
       <p class="metric-label">P2 max shares</p>
-      <p class="metric-value"><span id="max-shares">389</span></p>
+      <p class="metric-value"><span id="max-shares">—</span></p>
     </div>
     <div class="metric">
       <p class="metric-label">P2 max contribution</p>
-      <p class="metric-value">$<span id="max-contrib">10,256</span></p>
+      <p class="metric-value">$<span id="max-contrib">—</span></p>
     </div>
   </div>
 
@@ -387,32 +477,46 @@
       <span id="result-icon" class="result-icon">✓</span>
       <p id="result-title" class="result-title">Under the limit</p>
     </div>
-    <p id="result-detail" class="result-detail"></p>
   </div>
 
-  <div class="breakdown">
+  <div class="grid-output">
+    <div class="chart-card" id="chart-card">
+      <p class="card-label">Shares captured by contribution rate</p>
+      <div id="chart-wrap"><svg id="chart" viewBox="0 0 600 160" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg></div>
+      <div class="chart-legend">
+        <span><span class="legend-dot" style="background: var(--text-hint)"></span>Sub-optimal</span>
+        <span><span class="legend-dot" style="background: var(--success)"></span>Sweet spot (just under or just over)</span>
+      </div>
+    </div>
+
+    <div class="breakdown" id="breakdown">
     <p class="breakdown-label">Breakdown at current settings</p>
     <table class="breakdown-table">
       <tr>
         <td class="label-cell">6-month gross contribution</td>
-        <td class="value-cell">$<span id="contrib">10,988</span></td>
+        <td class="value-cell">$<span id="contrib">—</span></td>
       </tr>
       <tr>
         <td class="label-cell">Discounted purchase price</td>
-        <td class="value-cell">$<span id="price">26.35</span>/share</td>
+        <td class="value-cell">$<span id="price">—</span>/share</td>
       </tr>
       <tr>
         <td class="label-cell">Shares you'd buy</td>
-        <td class="value-cell"><span id="shares-bought">417</span></td>
+        <td class="value-cell"><span id="shares-bought">—</span></td>
       </tr>
-      <tr>
-        <td class="label-cell">Est. refund (if over)</td>
-        <td class="value-cell">$<span id="refund">732</span></td>
+      <tr class="row-highlight">
+        <td class="label-cell">Est. day-1 discount gain <span class="hint" title="Paper gain at purchase = shares × (purchase-date FMV − discounted price). Pre-tax; the bargain element is typically taxed as ordinary income.">ⓘ</span></td>
+        <td class="value-cell">$<span id="gain">—</span></td>
+      </tr>
+      <tr class="row-refund" id="row-refund">
+        <td class="label-cell">Auto-refund (cap exceeded) <span class="hint" title="Dollars returned to you because purchases would have exceeded the $25K annual IRS limit. Only the cap-driven refund — small fractional-share leftovers from integer-share rounding aren't counted.">ⓘ</span></td>
+        <td class="value-cell">$<span id="refund">—</span></td>
       </tr>
     </table>
+    </div>
   </div>
 
-  <p class="footer">Saves your inputs locally · Works offline · Single HTML file</p>
+  <p class="footer">Inputs stay on your device · Nothing transmitted · Works offline</p>
   <p class="disclaimer">⚠ <strong>Not financial, tax, or legal advice.</strong> Estimates only — verify against your plan documents and consult a qualified advisor before making contribution decisions.</p>
 
 </div>
@@ -479,36 +583,161 @@
     const cappedByIRS = sharesBought > maxShares;
     const refund = cappedByIRS ? Math.max(0, contrib - (maxShares * purchasePrice)) : 0;
 
-    $('used1').textContent = fmt(used1);
-    $('remaining').textContent = fmt(remaining);
-    $('max-shares').textContent = fmt(maxShares);
-    $('max-contrib').textContent = fmt(maxContrib);
-    $('contrib').textContent = fmt(contrib);
-    $('price').textContent = fmt2(purchasePrice);
-    $('shares-bought').textContent = fmt(sharesBought);
-    $('refund').textContent = fmt(refund);
+    // Day-1 paper gain = actual shares × (purchase-date FMV − discounted price)
+    const gain = Math.max(0, actualShares * (fmvp2 - purchasePrice));
+
+    // Determine if we have enough inputs to show meaningful output.
+    // P1 inputs (fmv1, shares1) are optional — only required together if shares1 > 0.
+    const missing = [];
+    if (salary <= 0) missing.push('annual salary');
+    if (fmv2 <= 0) missing.push('Period 2 grant-date FMV');
+    if (fmvp2 <= 0) missing.push('estimated purchase-date FMV');
+    if (shares1 > 0 && fmv1 <= 0) missing.push('Period 1 grant-date FMV');
+    const ready = missing.length === 0;
+    const dash = '—';
+
+    $('used1').textContent = (shares1 > 0 && fmv1 <= 0) ? dash : fmt(used1);
+    $('remaining').textContent = ready ? fmt(remaining) : dash;
+    $('max-shares').textContent = ready ? fmt(maxShares) : dash;
+    $('max-contrib').textContent = ready ? fmt(maxContrib) : dash;
+    $('contrib').textContent = salary > 0 ? fmt(contrib) : dash;
+    $('price').textContent = (fmv2 > 0 && fmvp2 > 0) ? fmt2(purchasePrice) : dash;
+    $('shares-bought').textContent = ready ? fmt(actualShares) : dash;
+    $('gain').textContent = ready ? fmt(gain) : dash;
+    $('refund').textContent = ready ? fmt(refund) : dash;
+    $('row-refund').classList.toggle('has-refund', ready && refund > 0);
 
     // Result card
     const card = $('result-card');
     const icon = $('result-icon');
     const title = $('result-title');
-    const detail = $('result-detail');
 
-    if (contrib <= maxContrib) {
-      card.className = 'result result-success';
-      icon.textContent = '✓';
-      title.textContent = 'Under the limit';
-      detail.textContent = `At ${pct}%, you'll contribute $${fmt(contrib)} and buy ${fmt(sharesBought)} shares with no refund.`;
-    } else {
-      const over = contrib - maxContrib;
-      const safePct = salary > 0 ? Math.floor((maxContrib * 2 / salary) * 100) : 0;
+    if (!ready) {
+      card.className = 'result result-info';
+      icon.textContent = 'ⓘ';
+      title.textContent = 'More inputs needed';
+    } else if (used1 >= 25000) {
       card.className = 'result result-warning';
       icon.textContent = '⚠';
-      title.textContent = 'Over the limit';
-      detail.textContent = `At ${pct}%, you'd overshoot by ~$${fmt(over)} and get an auto-refund. Drop to ${safePct}% to avoid it, or stay at ${pct}% and accept the refund.`;
+      title.textContent = 'Annual limit already used';
+    } else {
+      // Compute the two anchor points.
+      // noRefundPct: largest p in 1..15 where sharesAt(p) < maxShares (so refund=0)
+      // fullCapturePct: smallest p in 1..15 where sharesAt(p) >= maxShares
+      const sharesIfPct = p => Math.floor((salary * p / 200) / purchasePrice);
+      let noRefundPct = 0;
+      let fullCapturePct = null;
+      for (let p = 1; p <= 15; p++) {
+        const s = sharesIfPct(p);
+        if (s < maxShares) noRefundPct = p;
+        if (s >= maxShares && fullCapturePct === null) fullCapturePct = p;
+      }
+
+      const sharesLeft = Math.max(0, maxShares - actualShares);
+      const suffix = ` | ${fmt(sharesLeft)} share${sharesLeft === 1 ? '' : 's'} left | $${fmt(refund)} refund`;
+      const isExact = actualShares === maxShares && refund === 0;
+      let msg;
+      if (fullCapturePct === null) {
+        card.className = 'result result-info';
+        icon.textContent = 'ⓘ';
+        msg = 'Below';
+      } else if (isExact) {
+        card.className = 'result result-success';
+        icon.textContent = '✓';
+        msg = 'Exact';
+      } else if (actualShares >= maxShares) {
+        if (pct === fullCapturePct) {
+          card.className = 'result result-success';
+          icon.textContent = '✓';
+          msg = 'Just Over';
+        } else {
+          card.className = 'result result-info';
+          icon.textContent = 'ⓘ';
+          msg = 'Above';
+        }
+      } else {
+        if (pct === noRefundPct) {
+          card.className = 'result result-success';
+          icon.textContent = '✓';
+          msg = 'Just Under';
+        } else {
+          card.className = 'result result-info';
+          icon.textContent = 'ⓘ';
+          msg = 'Below';
+        }
+      }
+      title.textContent = msg + suffix;
     }
 
+    drawChart({ ready, salary, purchasePrice, maxShares, pct });
+
     save();
+  }
+
+  function drawChart({ ready, salary, purchasePrice, maxShares, pct }) {
+    const wrap = $('chart-wrap');
+    if (!ready || maxShares <= 0 || salary <= 0 || purchasePrice <= 0) {
+      wrap.innerHTML = '<div class="chart-empty">Enter inputs above to see your shares-by-rate forecast.</div>';
+      return;
+    }
+    const W = 600, H = 160;
+    const padL = 36, padR = 12, padT = 18, padB = 32;
+    const cw = W - padL - padR;
+    const ch = H - padT - padB;
+    const n = 15;
+    const gap = 4;
+    const barW = (cw - gap * (n - 1)) / n;
+
+    const sharesAtRaw = p => Math.floor((salary * p / 200) / purchasePrice);
+    const sharesAt = p => Math.min(sharesAtRaw(p), maxShares);
+
+    // Anchor points
+    let noRefundPct = 0;
+    let fullCapturePct = null;
+    for (let p = 1; p <= n; p++) {
+      const s = sharesAtRaw(p);
+      if (s < maxShares) noRefundPct = p;
+      if (s >= maxShares && fullCapturePct === null) fullCapturePct = p;
+    }
+
+    const yMax = Math.max(maxShares, 1) * 1.15;
+    const yScale = v => padT + ch - (v / yMax) * ch;
+
+    let svg = '';
+    // Reference line at maxShares
+    const yCap = yScale(maxShares);
+    svg += `<line x1="${padL}" x2="${W - padR}" y1="${yCap}" y2="${yCap}" stroke="currentColor" stroke-dasharray="3,3" stroke-opacity="0.4"/>`;
+    svg += `<text x="${W - padR}" y="${yCap - 5}" text-anchor="end" font-size="11" fill="currentColor" opacity="0.7">cap: ${fmt(maxShares)} shares</text>`;
+
+    // Bars
+    for (let p = 1; p <= n; p++) {
+      const v = sharesAt(p);
+      const x = padL + (p - 1) * (barW + gap);
+      const y = yScale(v);
+      const h = padT + ch - y;
+      let cls;
+      if (p === noRefundPct) cls = 'bar-noref';
+      else if (p === fullCapturePct) cls = 'bar-cap';
+      else if (fullCapturePct !== null && p > fullCapturePct) cls = 'bar-above';
+      else cls = 'bar-below';
+      if (p === pct) cls += ' bar-current';
+      svg += `<rect class="${cls}" x="${x}" y="${y}" width="${barW}" height="${Math.max(0, h)}" rx="2"/>`;
+    }
+
+    // X-axis labels at 1, 5, 10, 15, both anchors, and current pct
+    const labels = new Set([1, 5, 10, 15]);
+    if (noRefundPct > 0) labels.add(noRefundPct);
+    if (fullCapturePct !== null) labels.add(fullCapturePct);
+    labels.add(pct);
+    [...labels].sort((a, b) => a - b).forEach(p => {
+      const x = padL + (p - 1) * (barW + gap) + barW / 2;
+      const y = H - padB + 14;
+      const weight = p === pct ? '600' : '400';
+      const opacity = p === pct ? '1' : '0.7';
+      svg += `<text x="${x}" y="${y}" text-anchor="middle" font-size="11" fill="currentColor" opacity="${opacity}" font-weight="${weight}">${p}%</text>`;
+    });
+
+    wrap.innerHTML = '<svg id="chart" viewBox="0 0 600 160" preserveAspectRatio="xMidYMid meet" aria-hidden="true">' + svg + '</svg>';
   }
 
   inputs.forEach(id => {
