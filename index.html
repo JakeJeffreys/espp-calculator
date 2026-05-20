@@ -474,7 +474,10 @@
 
     // Actual shares acquired = min(what they can afford, what limit allows)
     const actualShares = Math.min(sharesBought, maxShares);
-    const refund = Math.max(0, contrib - (actualShares * purchasePrice));
+    // Refund only counts the IRS-cap-driven portion (forced refund), not the
+    // small fractional-share leftover from integer-share rounding.
+    const cappedByIRS = sharesBought > maxShares;
+    const refund = cappedByIRS ? Math.max(0, contrib - (maxShares * purchasePrice)) : 0;
 
     $('used1').textContent = fmt(used1);
     $('remaining').textContent = fmt(remaining);
