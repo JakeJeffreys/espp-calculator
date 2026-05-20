@@ -172,39 +172,100 @@
 
   input[type="range"] {
     width: 100%;
-    height: 18px;
+    height: 24px;
     -webkit-appearance: none;
     appearance: none;
     background: transparent;
     cursor: pointer;
   }
   input[type="range"]::-webkit-slider-runnable-track {
-    height: 4px;
+    height: 6px;
     background: var(--border-strong);
-    border-radius: 2px;
+    border-radius: 3px;
   }
   input[type="range"]::-moz-range-track {
-    height: 4px;
+    height: 6px;
     background: var(--border-strong);
-    border-radius: 2px;
+    border-radius: 3px;
   }
   input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 18px;
-    height: 18px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
-    background: var(--surface);
-    border: 1.5px solid var(--text);
-    margin-top: -7px;
+    background: var(--accent);
+    border: 2px solid var(--surface);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.25), 0 0 0 1px var(--accent);
+    margin-top: -8px;
     cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.15s ease;
   }
   input[type="range"]::-moz-range-thumb {
-    width: 18px;
-    height: 18px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
-    background: var(--surface);
-    border: 1.5px solid var(--text);
+    background: var(--accent);
+    border: 2px solid var(--surface);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.25), 0 0 0 1px var(--accent);
     cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.15s ease;
+  }
+  input[type="range"]:hover::-webkit-slider-thumb {
+    transform: scale(1.08);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3), 0 0 0 1px var(--accent);
+  }
+  input[type="range"]:hover::-moz-range-thumb {
+    transform: scale(1.08);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3), 0 0 0 1px var(--accent);
+  }
+  input[type="range"]:focus::-webkit-slider-thumb {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.25), 0 0 0 4px var(--accent-bg);
+  }
+  input[type="range"]:focus::-moz-range-thumb {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.25), 0 0 0 4px var(--accent-bg);
+  }
+
+  .slider-wrap {
+    position: relative;
+  }
+  .slider-wrap input[type="range"] {
+    position: relative;
+    z-index: 1;
+    display: block;
+  }
+  /* Ticks span exactly thumb-center-min to thumb-center-max (thumb radius = 11px). */
+  .tick-marks {
+    position: absolute;
+    left: 11px;
+    right: 11px;
+    top: 18px;
+    height: 10px;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+  }
+  .tick-marks span {
+    width: 1px;
+    height: 6px;
+    background: var(--text-hint);
+    opacity: 0.6;
+  }
+  .tick-marks span.major {
+    height: 10px;
+    opacity: 0.9;
+  }
+  .tick-row {
+    position: relative;
+    margin: 6px 11px 0;
+    height: 14px;
+    font-size: 11px;
+    color: var(--text-hint);
+    font-variant-numeric: tabular-nums;
+  }
+  .tick-row span {
+    position: absolute;
+    transform: translateX(-50%);
+    top: 0;
   }
 
   .slider-row {
@@ -255,19 +316,12 @@
     font-weight: 500;
     margin: 0;
   }
-  .result-detail {
-    font-size: 14px;
-    line-height: 1.6;
-    margin: 0;
-  }
-
   .result-success {
     background: var(--success-bg);
     border: 0.5px solid var(--success-border);
     color: var(--success);
   }
   .result-success .result-title,
-  .result-success .result-detail,
   .result-success .result-icon { color: var(--success); }
 
   .result-warning {
@@ -276,7 +330,6 @@
     color: var(--warning);
   }
   .result-warning .result-title,
-  .result-warning .result-detail,
   .result-warning .result-icon { color: var(--warning); }
 
   .result-info {
@@ -285,7 +338,6 @@
     color: var(--accent);
   }
   .result-info .result-title,
-  .result-info .result-detail,
   .result-info .result-icon { color: var(--accent); }
 
   .breakdown {
@@ -361,13 +413,48 @@
   .disclaimer strong { font-weight: 600; }
 
   .hint {
+    position: relative;
     display: inline-block;
     color: var(--text-hint);
-    cursor: help;
+    cursor: pointer;
     font-size: 12px;
     margin-left: 2px;
+    user-select: none;
   }
-  .hint:hover { color: var(--accent); }
+  .hint:hover,
+  .hint.active { color: var(--accent); }
+  .hint.active::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: max-content;
+    max-width: 280px;
+    padding: 8px 10px;
+    background: var(--surface);
+    border: 0.5px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+    font-size: 12px;
+    line-height: 1.45;
+    font-weight: 400;
+    color: var(--text);
+    white-space: normal;
+    text-align: left;
+    z-index: 20;
+    pointer-events: none;
+  }
+  .hint.active::before {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: var(--border-strong);
+    z-index: 20;
+  }
 
   .chart-card {
     background: var(--surface-2);
@@ -416,7 +503,7 @@
     <div class="card">
       <p class="card-label">Period 1 (completed)</p>
       <div class="field">
-        <label for="fmv1">Grant-date FMV ($) <span class="hint" title="Fair Market Value (closing share price) on the offering's grant date. Used to measure the $25K annual IRS limit.">ⓘ</span></label>
+        <label for="fmv1">Grant-date FMV ($) <span class="hint" tabindex="0" role="button" aria-label="More info" data-tip="Fair Market Value (closing share price) on the offering's grant date. Used to measure the $25K annual IRS limit.">ⓘ</span></label>
         <input type="number" id="fmv1" value="" step="0.01" min="0" placeholder="e.g. 24.21">
       </div>
       <div class="field">
@@ -428,11 +515,11 @@
     <div class="card">
       <p class="card-label">Period 2 (upcoming)</p>
       <div class="field">
-        <label for="fmv2">Grant-date FMV ($) <span class="hint" title="Fair Market Value (closing share price) on the offering's grant date. With the lookback, the discounted price uses the LOWER of grant-date and purchase-date FMV.">ⓘ</span></label>
+        <label for="fmv2">Grant-date FMV ($) <span class="hint" tabindex="0" role="button" aria-label="More info" data-tip="Fair Market Value (closing share price) on the offering's grant date. With the lookback, the discounted price uses the LOWER of grant-date and purchase-date FMV.">ⓘ</span></label>
         <input type="number" id="fmv2" value="" step="0.01" min="0" placeholder="e.g. 31.00">
       </div>
       <div class="field">
-        <label for="fmvp2">Est. purchase-date FMV ($) <span class="hint" title="Estimated share price on the purchase date (end of the offering period). A best-guess — actual price determines the final purchase price via the 15% discount on the lower of grant/purchase FMV.">ⓘ</span></label>
+        <label for="fmvp2">Est. purchase-date FMV ($) <span class="hint" tabindex="0" role="button" aria-label="More info" data-tip="Estimated share price on the purchase date (end of the offering period). A best-guess — actual price determines the final purchase price via the 15% discount on the lower of grant/purchase FMV.">ⓘ</span></label>
         <input type="number" id="fmvp2" value="" step="0.01" min="0" placeholder="e.g. 31.00">
       </div>
     </div>
@@ -449,7 +536,21 @@
         <label for="pct" style="margin-bottom: 0;">Period 2 contribution rate</label>
         <span class="slider-value"><span id="pct-out">15</span>%</span>
       </div>
-      <input type="range" id="pct" min="1" max="15" value="15" step="1">
+      <div class="slider-wrap">
+        <input type="range" id="pct" min="1" max="15" value="15" step="1">
+        <div class="tick-marks" aria-hidden="true">
+          <span class="major"></span><span></span><span></span><span></span>
+          <span class="major"></span><span></span><span></span><span></span>
+          <span></span><span class="major"></span><span></span><span></span>
+          <span></span><span></span><span class="major"></span>
+        </div>
+      </div>
+      <div class="tick-row" aria-hidden="true">
+        <span style="left: 0%">1</span>
+        <span style="left: 28.571%">5</span>
+        <span style="left: 64.286%">10</span>
+        <span style="left: 100%">15</span>
+      </div>
     </div>
   </div>
 
@@ -475,7 +576,7 @@
   <div id="result-card" class="result result-success">
     <div class="result-header">
       <span id="result-icon" class="result-icon">✓</span>
-      <p id="result-title" class="result-title">Under the limit</p>
+      <p id="result-title" class="result-title">—</p>
     </div>
   </div>
 
@@ -485,7 +586,7 @@
       <div id="chart-wrap"><svg id="chart" viewBox="0 0 600 160" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg></div>
       <div class="chart-legend">
         <span><span class="legend-dot" style="background: var(--text-hint)"></span>Sub-optimal</span>
-        <span><span class="legend-dot" style="background: var(--success)"></span>Sweet spot (just under or just over)</span>
+        <span><span class="legend-dot" style="background: var(--success)"></span>Sweet spot (just under, exact, or just over)</span>
       </div>
     </div>
 
@@ -505,11 +606,11 @@
         <td class="value-cell"><span id="shares-bought">—</span></td>
       </tr>
       <tr class="row-highlight">
-        <td class="label-cell">Est. day-1 discount gain <span class="hint" title="Paper gain at purchase = shares × (purchase-date FMV − discounted price). Pre-tax; the bargain element is typically taxed as ordinary income.">ⓘ</span></td>
+        <td class="label-cell">Est. day-1 discount gain <span class="hint" tabindex="0" role="button" aria-label="More info" data-tip="Paper gain at purchase = shares × (purchase-date FMV − discounted price). Pre-tax; the bargain element is typically taxed as ordinary income.">ⓘ</span></td>
         <td class="value-cell">$<span id="gain">—</span></td>
       </tr>
       <tr class="row-refund" id="row-refund">
-        <td class="label-cell">Auto-refund (cap exceeded) <span class="hint" title="Dollars returned to you because purchases would have exceeded the $25K annual IRS limit. Only the cap-driven refund — small fractional-share leftovers from integer-share rounding aren't counted.">ⓘ</span></td>
+        <td class="label-cell">Auto-refund (cap exceeded) <span class="hint" tabindex="0" role="button" aria-label="More info" data-tip="Dollars returned to you because purchases would have exceeded the $25K annual IRS limit. Only the cap-driven refund — small fractional-share leftovers from integer-share rounding aren't counted.">ⓘ</span></td>
         <td class="value-cell">$<span id="refund">—</span></td>
       </tr>
     </table>
@@ -742,6 +843,26 @@
 
   inputs.forEach(id => {
     $(id).addEventListener('input', calc);
+  });
+
+  document.addEventListener('click', (e) => {
+    const target = e.target.closest('.hint');
+    document.querySelectorAll('.hint.active').forEach(h => {
+      if (h !== target) h.classList.remove('active');
+    });
+    if (target) {
+      e.preventDefault();
+      target.classList.toggle('active');
+    }
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.hint.active').forEach(h => h.classList.remove('active'));
+    }
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('hint')) {
+      e.preventDefault();
+      e.target.classList.toggle('active');
+    }
   });
 
   calc();
