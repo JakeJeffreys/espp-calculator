@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ESPP Contribution Calculator</title>
+<style>
+  :root {
+    --bg: #faf9f7;
+    --surface: #ffffff;
+    --surface-2: #f1efe8;
+    --text: #1a1a1a;
+    --text-muted: #5f5e5a;
+    --text-hint: #888780;
+    --border: rgba(0, 0, 0, 0.12);
+    --border-strong: rgba(0, 0, 0, 0.24);
+    --accent: #185fa5;
+    --accent-bg: #e6f1fb;
+    --success: #0f6e56;
+    --success-bg: #e1f5ee;
+    --success-border: #5dcaa5;
+    --warning: #854f0b;
+    --warning-bg: #faeeda;
+    --warning-border: #ef9f27;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a;
+      --surface: #262624;
+      --surface-2: #2c2c2a;
+      --text: #f0eee6;
+      --text-muted: #b4b2a9;
+      --text-hint: #888780;
+      --border: rgba(255, 255, 255, 0.12);
+      --border-strong: rgba(255, 255, 255, 0.24);
+      --accent: #85b7eb;
+      --accent-bg: #042c53;
+      --success: #9fe1cb;
+      --success-bg: #04342c;
+      --success-border: #0f6e56;
+      --warning: #fac775;
+      --warning-bg: #412402;
+      --warning-border: #854f0b;
+    }
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding: 2rem 1rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 500;
+  }
+
+  .header-note {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 1rem;
+  }
+
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 1.5rem 0;
+  }
+
+  @media (max-width: 560px) {
+    .grid-2 { grid-template-columns: 1fr; }
+    .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1rem 1.25rem;
+  }
+
+  .card-label {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 0 0 12px;
+    font-weight: 500;
+  }
+
+  .field {
+    margin-bottom: 12px;
+  }
+  .field:last-child {
+    margin-bottom: 0;
+  }
+
+  label {
+    font-size: 13px;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  input[type="number"] {
+    width: 100%;
+    height: 36px;
+    padding: 0 12px;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--text);
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-md);
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  input[type="number"]:hover {
+    border-color: var(--border-strong);
+  }
+  input[type="number"]:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-bg);
+  }
+
+  input[type="range"] {
+    width: 100%;
+    height: 18px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+  }
+  input[type="range"]::-webkit-slider-runnable-track {
+    height: 4px;
+    background: var(--border-strong);
+    border-radius: 2px;
+  }
+  input[type="range"]::-moz-range-track {
+    height: 4px;
+    background: var(--border-strong);
+    border-radius: 2px;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 1.5px solid var(--text);
+    margin-top: -7px;
+    cursor: pointer;
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 1.5px solid var(--text);
+    cursor: pointer;
+  }
+
+  .slider-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+  .slider-value {
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .metric {
+    background: var(--surface-2);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+  }
+  .metric-label {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 0 0 4px;
+  }
+  .metric-value {
+    font-size: 24px;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .result {
+    border-radius: var(--radius-lg);
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .result-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .result-icon {
+    font-size: 20px;
+    line-height: 1;
+  }
+  .result-title {
+    font-size: 15px;
+    font-weight: 500;
+    margin: 0;
+  }
+  .result-detail {
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .result-success {
+    background: var(--success-bg);
+    border: 0.5px solid var(--success-border);
+    color: var(--success);
+  }
+  .result-success .result-title,
+  .result-success .result-detail,
+  .result-success .result-icon { color: var(--success); }
+
+  .result-warning {
+    background: var(--warning-bg);
+    border: 0.5px solid var(--warning-border);
+    color: var(--warning);
+  }
+  .result-warning .result-title,
+  .result-warning .result-detail,
+  .result-warning .result-icon { color: var(--warning); }
+
+  .breakdown {
+    background: var(--surface-2);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.25rem;
+  }
+  .breakdown-label {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 0 0 8px;
+    font-weight: 500;
+  }
+  .breakdown-table {
+    width: 100%;
+    font-size: 13px;
+    border-collapse: collapse;
+  }
+  .breakdown-table td {
+    padding: 4px 0;
+  }
+  .breakdown-table .label-cell {
+    color: var(--text-muted);
+  }
+  .breakdown-table .value-cell {
+    text-align: right;
+    font-weight: 500;
+  }
+
+  .footer {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-hint);
+  }
+  .footer a {
+    color: var(--text-muted);
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h1>ESPP contribution calculator</h1>
+    <span class="header-note">$25K IRS limit · 15% discount with lookback</span>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <p class="card-label">Period 1 (completed)</p>
+      <div class="field">
+        <label for="fmv1">Grant-date FMV ($)</label>
+        <input type="number" id="fmv1" value="24.21" step="0.01" min="0">
+      </div>
+      <div class="field">
+        <label for="shares1">Shares purchased</label>
+        <input type="number" id="shares1" value="534" step="1" min="0">
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="card-label">Period 2 (upcoming)</p>
+      <div class="field">
+        <label for="fmv2">Grant-date FMV ($)</label>
+        <input type="number" id="fmv2" value="31.00" step="0.01" min="0">
+      </div>
+      <div class="field">
+        <label for="fmvp2">Est. purchase-date FMV ($)</label>
+        <input type="number" id="fmvp2" value="31.00" step="0.01" min="0">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="card-label">Your details</p>
+    <div class="field">
+      <label for="salary">Annual salary ($)</label>
+      <input type="number" id="salary" value="" step="1000" min="0" placeholder="Enter salary">
+    </div>
+    <div class="field">
+      <div class="slider-row">
+        <label for="pct" style="margin-bottom: 0;">Period 2 contribution rate</label>
+        <span class="slider-value"><span id="pct-out">15</span>%</span>
+      </div>
+      <input type="range" id="pct" min="1" max="15" value="15" step="1">
+    </div>
+  </div>
+
+  <div class="grid-4">
+    <div class="metric">
+      <p class="metric-label">P1 limit used</p>
+      <p class="metric-value">$<span id="used1">12,928</span></p>
+    </div>
+    <div class="metric">
+      <p class="metric-label">P2 limit remaining</p>
+      <p class="metric-value">$<span id="remaining">12,072</span></p>
+    </div>
+    <div class="metric">
+      <p class="metric-label">P2 max shares</p>
+      <p class="metric-value"><span id="max-shares">389</span></p>
+    </div>
+    <div class="metric">
+      <p class="metric-label">P2 max contribution</p>
+      <p class="metric-value">$<span id="max-contrib">10,256</span></p>
+    </div>
+  </div>
+
+  <div id="result-card" class="result result-success">
+    <div class="result-header">
+      <span id="result-icon" class="result-icon">✓</span>
+      <p id="result-title" class="result-title">Under the limit</p>
+    </div>
+    <p id="result-detail" class="result-detail"></p>
+  </div>
+
+  <div class="breakdown">
+    <p class="breakdown-label">Breakdown at current settings</p>
+    <table class="breakdown-table">
+      <tr>
+        <td class="label-cell">6-month gross contribution</td>
+        <td class="value-cell">$<span id="contrib">10,988</span></td>
+      </tr>
+      <tr>
+        <td class="label-cell">Discounted purchase price</td>
+        <td class="value-cell">$<span id="price">26.35</span>/share</td>
+      </tr>
+      <tr>
+        <td class="label-cell">Shares you'd buy</td>
+        <td class="value-cell"><span id="shares-bought">417</span></td>
+      </tr>
+      <tr>
+        <td class="label-cell">Est. refund (if over)</td>
+        <td class="value-cell">$<span id="refund">732</span></td>
+      </tr>
+    </table>
+  </div>
+
+  <p class="footer">Saves your inputs locally · Works offline · Single HTML file</p>
+
+</div>
+
+<script>
+(function() {
+  const $ = id => document.getElementById(id);
+  const fmt = n => n.toLocaleString('en-US', { maximumFractionDigits: 0 });
+  const fmt2 = n => n.toFixed(2);
+
+  const STORAGE_KEY = 'espp-calc-v1';
+  const inputs = ['fmv1', 'shares1', 'fmv2', 'fmvp2', 'salary', 'pct'];
+
+  // Load saved values
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    inputs.forEach(id => {
+      if (saved[id] !== undefined && saved[id] !== null && saved[id] !== '') {
+        $(id).value = saved[id];
+      }
+    });
+  } catch (e) { /* ignore */ }
+
+  function save() {
+    try {
+      const state = {};
+      inputs.forEach(id => { state[id] = $(id).value; });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) { /* ignore */ }
+  }
+
+  function calc() {
+    const fmv1 = parseFloat($('fmv1').value) || 0;
+    const shares1 = parseFloat($('shares1').value) || 0;
+    const fmv2 = parseFloat($('fmv2').value) || 0;
+    const fmvp2 = parseFloat($('fmvp2').value) || 0;
+    const salary = parseFloat($('salary').value) || 0;
+    const pct = parseFloat($('pct').value) || 0;
+
+    $('pct-out').textContent = pct;
+
+    // Period 1 limit used (grant-date FMV basis)
+    const used1 = shares1 * fmv1;
+    const remaining = Math.max(0, 25000 - used1);
+
+    // Period 2 max shares at grant FMV
+    const maxShares = fmv2 > 0 ? Math.floor(remaining / fmv2) : 0;
+
+    // Discounted purchase price = 85% of lower of grant-date and purchase-date FMV
+    const lowerFmv = Math.min(fmv2, fmvp2);
+    const purchasePrice = lowerFmv * 0.85;
+
+    // Max contribution before refund: max shares × purchase price
+    const maxContrib = maxShares * purchasePrice;
+
+    // Actual 6-month contribution at chosen %
+    const contrib = (salary * pct / 100) / 2;
+    const sharesBought = purchasePrice > 0 ? Math.floor(contrib / purchasePrice) : 0;
+
+    // Actual shares acquired = min(what they can afford, what limit allows)
+    const actualShares = Math.min(sharesBought, maxShares);
+    const refund = Math.max(0, contrib - (actualShares * purchasePrice));
+
+    $('used1').textContent = fmt(used1);
+    $('remaining').textContent = fmt(remaining);
+    $('max-shares').textContent = fmt(maxShares);
+    $('max-contrib').textContent = fmt(maxContrib);
+    $('contrib').textContent = fmt(contrib);
+    $('price').textContent = fmt2(purchasePrice);
+    $('shares-bought').textContent = fmt(sharesBought);
+    $('refund').textContent = fmt(refund);
+
+    // Result card
+    const card = $('result-card');
+    const icon = $('result-icon');
+    const title = $('result-title');
+    const detail = $('result-detail');
+
+    if (contrib <= maxContrib) {
+      card.className = 'result result-success';
+      icon.textContent = '✓';
+      title.textContent = 'Under the limit';
+      detail.textContent = `At ${pct}%, you'll contribute $${fmt(contrib)} and buy ${fmt(sharesBought)} shares with no refund.`;
+    } else {
+      const over = contrib - maxContrib;
+      const safePct = salary > 0 ? Math.floor((maxContrib * 2 / salary) * 100) : 0;
+      card.className = 'result result-warning';
+      icon.textContent = '⚠';
+      title.textContent = 'Over the limit';
+      detail.textContent = `At ${pct}%, you'd overshoot by ~$${fmt(over)} and get an auto-refund. Drop to ${safePct}% to avoid it, or stay at ${pct}% and accept the refund.`;
+    }
+
+    save();
+  }
+
+  inputs.forEach(id => {
+    $(id).addEventListener('input', calc);
+  });
+
+  calc();
+})();
+</script>
+
+</body>
+</html>
