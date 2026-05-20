@@ -2,6 +2,8 @@
 
 A single-file HTML calculator for finding the right contribution rate in a two-period Employee Stock Purchase Plan (ESPP) with a $25K annual IRS limit, 15% discount, and lookback.
 
+**Live:** [jakejeffreys.github.io/espp-calculator](https://jakejeffreys.github.io/espp-calculator/)
+
 ## What it does
 
 Given your Period 1 results and Period 2 estimates, it tells you:
@@ -21,9 +23,9 @@ A bar chart shows shares captured at every rate from 1–15%, with sweet-spot ra
 
 ## Usage
 
-Open `index.html` in any modern browser. No build step, no server, no dependencies.
+Visit [jakejeffreys.github.io/espp-calculator](https://jakejeffreys.github.io/espp-calculator/), or clone this repo and open `index.html` in any modern browser — no build step, no server, no dependencies.
 
-Inputs are saved to `localStorage` on your device. Nothing is transmitted.
+Inputs are saved to `localStorage` in your browser. Nothing is transmitted.
 
 ## Disclaimer
 
